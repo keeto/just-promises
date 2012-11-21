@@ -1,5 +1,5 @@
-Almost
-======
+Just Promises
+=============
 
 A barebones implementation of the [CommonJS Promises/A proposal][promise-a].
 
