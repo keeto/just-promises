@@ -17,6 +17,31 @@ Features
 Usage
 -----
 
+### On the Browser
+
+If you're using the library on a browser environment, just include the `promise.js` file.
+
+	<script type="text/javascript" src="path/to/promise.js"></script>
+
+If you want the "extras library" (see "Extras" below), include the `promise.extras.js` file after the `promise.js` file.
+
+	<script type="text/javascript" src="path/to/promise.js"></script>
+	<script type="text/javascript" src="path/to/promise.extra.js"></script>
+
+### On a CommonJS Engine
+
+If you're using the library on a CommonJS engine such as node or ringo, import the `promise.js` file. You'll get a single exported object, which is the `Promise` class:
+
+	var Promise = require('./promise').Promise;
+
+If you want the "extras library" (see "Extras" below), import the `promise.extras.js` file and then call the exported `extend` function, passing in the `Promise` class from `promise.js`:
+
+	var Promise = require('./promise').Promise;
+	require('./promise.extras').extend(Promise);
+
+API
+---
+
 The library exposes a single class called `Promise`. To create a new promise, simply create a new instance of this class:
 
 	var promise = new Promise();
