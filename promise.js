@@ -84,33 +84,6 @@
 		}
 	};
 
-	Promise.all = function(array) {
-		var values = [];
-		var promise = new Promise();
-		var counter = array.length;
-		var done = false;
-		for (var i = 0, l = array.length; i < l; i++) {
-			var item = array[i];
-			if (!(item instanceof Promise)) {
-				var _item = new Promise();
-				_item.fulfill(item);
-				item = _item;
-			}
-			item.then(function(object) {
-				if (done) return;
-				values.push(object);
-				if (values.length !== counter) return;
-				done = true;
-				promise.resolve(values);
-			}, function(error) {
-				if (done) return;
-				done = true;
-				promise.fail(error);
-			});
-		}
-		return promise;
-	};
-
 	exports.Promise = Promise;
 
 })(typeof exports != 'undefined' ? exports : this);
