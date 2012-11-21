@@ -51,6 +51,52 @@ There is only one "utility" method included in the main library called `join`. T
 	promiseB.join(promiseA);
 
 
+Extras
+------
+
+The extras module includes set of additional features that you can import.
+
+### Extra Methods
+
+The `get` method takes a string argument that corresponds to a property name in the future value of a promise. It then returns a promise that would be fulfilled with that property's value.
+
+	var promise = new Promise();
+
+	promise.fulfill({greeting: 'Hello'})
+
+	promise.get('greeting').then(function(greeting) {
+		console.log(greeting); // logs "Hello"
+	});
+
+The `call` method takes a string argument that corresponds to a method name in the future value of a promise, as well zero or more additional arguments. It then returns a promise that would be fulfilled with the return value of that method called with the arguments.
+
+	var promise = new Promise();
+
+	promise.fulfill({
+		sum: function() {
+			var sum = 0;
+			for (var l = arguments.length; l--;) sum += arguments[l];
+			return sum;
+		}
+	});
+
+	promise.call('sum', 1, 2, 3, 4).then(function(value) {
+		console.log(value); // logs 10
+	});
+
+The `rescue` method is a shortcut for adding failure handlers without a fulfillment handler:
+
+	// instead of this
+	promise.then(null, errorHandler);
+
+	// you can do
+	promise.rescue(errorHandler);
+
+### Generics
+
+`Promise.all` is a utility generic that accepts an array of promises and returns a promise that will be fulfilled with an array containing the resolved values of all promises. If one of the promises in the original array fails, the promise returned by `Promise.all` will also be failed.
+
+
 Copyright and License
 ---------------------
 
