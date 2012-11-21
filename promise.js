@@ -1,6 +1,5 @@
 (function(exports) {
 
-	var slice = Array.prototype.slice;
 	var states = {UNFULFILLED: 0, FULFILLED: 1, FAILED: 2};
 
 	function Promise() {
@@ -44,33 +43,7 @@
 		return promise;
 	};
 
-	Promise.prototype.rescue = function(failedHandler) {
-		return this.then(null, failedHandler);
-	};
-
-	Promise.prototype.get = function(propery) {
-		var promise = new Promise();
-		this.then(function(object) {
-			promise.fulfill(object[property]);
-		}, function(error) {
-			promise.fail(error);
-		});
-		return promise;
-	};
-
-	Promise.prototype.call = function(method) {
-		var args = slice.call(arguments, 1);
-		var promise = new Promise();
-		this.then(function(object) {
-			try { promise.fulfill(object[method].apply(object, args)); }
-			catch (e) { promise.fail(e); }
-		}, function(error) {
-			promise.fail(error);
-		});
-		return promise;
-	};
-
-	Promise.prototype.pipe = function(promise) {
+	Promise.prototype.join = function(promise) {
 		this.then(function(value) {
 			promise.fulfill(value);
 		}, function(error) {
@@ -100,7 +73,7 @@
 				continue;
 			}
 			if (returnValue instanceof Promise) {
-				returnValue.pipe(promise);
+				returnValue.join(promise);
 			} else {
 				if (!fulfilled && returnValue === undefined) {
 					promise.fail(returnValue);
