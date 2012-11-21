@@ -14,7 +14,7 @@
 
 	Promise.prototype.fulfill = function(value) {
 		var self = this;
-		if (this._state) return;
+		if (this._state !== states.UNFULFILLED) return;
 		this._value = value;
 		this._state = states.FULFILLED;
 		Promise.defer(function() { self._runHandlers(); });
@@ -23,7 +23,7 @@
 
 	Promise.prototype.fail = function(error) {
 		var self = this;
-		if (this._state) return;
+		if (this._state !== states.UNFULFILLED) return;
 		this._value = error;
 		this._state = states.FAILED;
 		Promise.defer(function() { self._runHandlers(); });
