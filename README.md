@@ -84,7 +84,7 @@ There is only one "utility" method included in the main library called `pipe`. T
 ```js
 var promiseA = new Promise();
 promiseA.then(function(value) {
-console.log(value); // logs 'Hello'
+	console.log(value); // logs 'Hello'
 });
 
 var promiseB = new Promise();
@@ -109,7 +109,7 @@ var promise = new Promise();
 promise.fulfill({greeting: 'Hello'})
 
 promise.get('greeting').then(function(greeting) {
-console.log(greeting); // logs "Hello"
+	console.log(greeting); // logs "Hello"
 });
 ```
 
@@ -119,15 +119,15 @@ The `call` method takes a string argument that corresponds to a method name in t
 var promise = new Promise();
 
 promise.fulfill({
-sum: function() {
-var sum = 0;
-for (var l = arguments.length; l--;) sum += arguments[l];
-return sum;
-}
+	sum: function() {
+		var sum = 0;
+		for (var l = arguments.length; l--;) sum += arguments[l];
+		return sum;
+	}
 });
 
 promise.call('sum', 1, 2, 3, 4).then(function(value) {
-console.log(value); // logs 10
+	console.log(value); // logs 10
 });
 ```
 
