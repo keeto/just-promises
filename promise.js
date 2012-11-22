@@ -43,7 +43,7 @@
 		return promise;
 	};
 
-	Promise.prototype.join = function(promise) {
+	Promise.prototype.pipe = function(promise) {
 		this.then(function(value) {
 			promise.fulfill(value);
 		}, function(error) {
@@ -73,7 +73,7 @@
 				continue;
 			}
 			if (returnValue instanceof Promise) {
-				returnValue.join(promise);
+				returnValue.pipe(promise);
 			} else {
 				if (!fulfilled && returnValue === undefined) {
 					promise.fail(returnValue);

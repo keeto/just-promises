@@ -63,7 +63,7 @@ As directed by the Promise/A spec, all promises have a `then` method that accept
 
 The fulfilled and the fail callbacks are called when the promise is fulfilled or failed, respectively. Progress handlers are, consciously, ignored for now.
 
-There is only one "utility" method included in the main library called `join`. This method can be used to pipe the results of one promise to another.
+There is only one "utility" method included in the main library called `pipe`. This method can be used to pipe the results of one promise to another.
 
 	var promiseA = new Promise();
 	promiseA.then(function(value) {
@@ -73,7 +73,7 @@ There is only one "utility" method included in the main library called `join`. T
 	var promiseB = new Promise();
 	promiseB.fulfill('Hello');
 
-	promiseB.join(promiseA);
+	promiseB.pipe(promiseA);
 
 
 Extras
