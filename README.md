@@ -101,6 +101,16 @@ The extras module includes set of additional features that you can import.
 
 ### Extra Methods
 
+The `rescue` method is a shortcut for adding failure handlers without a fulfillment handler:
+
+```js
+// instead of this
+promise.then(null, errorHandler);
+
+// you can do
+promise.rescue(errorHandler);
+```
+
 The `get` method takes a string argument that corresponds to a property name in the future value of a promise. It then returns a promise that would be fulfilled with that property's value.
 
 ```js
@@ -131,14 +141,19 @@ promise.call('sum', 1, 2, 3, 4).then(function(value) {
 });
 ```
 
-The `rescue` method is a shortcut for adding failure handlers without a fulfillment handler:
+The `thenSpread` method is similar to the `then` method, but if the promise is fulfilled with an array, it would "spread" the items in the array as arguments to the fulfillment callback:
 
 ```js
-// instead of this
-promise.then(null, errorHandler);
+var promise = new Promise();
 
-// you can do
-promise.rescue(errorHandler);
+promise.fulfill(['Hello', 'World!', 'Hi', 'Universe!']);
+
+promise.thenSpread(function(first, second, third, fourth) {
+	console.log(first);  // logs 'Hello'
+	console.log(second); // logs 'World!'
+	console.log(third);  // logs 'Hi'
+	console.log(fourth); // logs 'Universe!'
+});
 ```
 
 ### Generics

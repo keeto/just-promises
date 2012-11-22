@@ -2,7 +2,12 @@
 
 var extend = function(Promise) {
 
+	var toString = Object.prototype.toString;
 	var slice = Array.prototype.slice;
+
+	function isArray(item) {
+		return toString.call(item) == '[object Array]';
+	}
 
 	Promise.all = function(array) {
 		var values = [];
@@ -55,6 +60,12 @@ var extend = function(Promise) {
 			promise.fail(error);
 		});
 		return promise;
+	};
+
+	Promise.prototype.thenSpread = function(fulfilledHandler, failedHandler) {
+		return this.then(function(value) {
+			return isArray(value) ? fulfilledHandler.apply(this, value) : fulfilledHandler.call(this, value);
+		}, failedHandler);
 	};
 
 };
