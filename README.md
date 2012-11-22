@@ -23,7 +23,7 @@ If you're using the library on a browser environment, just include the `promise.
 
 	<script type="text/javascript" src="path/to/promise.js"></script>
 
-If you want the "extras library" (see "Extras" below), include the `promise.extras.js` file after the `promise.js` file.
+If you want the "extras library" (see "Extras" below), include the `promise.extra.js` file after the `promise.js` file.
 
 	<script type="text/javascript" src="path/to/promise.js"></script>
 	<script type="text/javascript" src="path/to/promise.extra.js"></script>
@@ -34,10 +34,10 @@ If you're using the library on a CommonJS engine such as node or ringo, import t
 
 	var Promise = require('./promise').Promise;
 
-If you want the "extras library" (see "Extras" below), import the `promise.extras.js` file and then call the exported `extend` function, passing in the `Promise` class from `promise.js`:
+If you want the "extras library" (see "Extras" below), import the `promise.extra.js` file and then call the exported `extend` function, passing in the `Promise` class from `promise.js`:
 
 	var Promise = require('./promise').Promise;
-	require('./promise.extras').extend(Promise);
+	require('./promise.extra').extend(Promise);
 
 API
 ---
