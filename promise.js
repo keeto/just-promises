@@ -8,9 +8,9 @@
 		this._handlers = [];
 	}
 
-	Promise.defer = typeof process != 'undefined' ? process.nextTick : function(fn) {
-		setTimeout(fn, 0);
-	};
+	Promise.defer = typeof process !== 'undefined' && typeof process.nextTick === 'function'
+		? process.nextTick 
+		: function(fn) { setTimeout(fn, 0); };
 
 	Promise.prototype.fulfill = function(value) {
 		var self = this;
