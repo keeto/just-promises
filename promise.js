@@ -6,6 +6,7 @@
 		this._state = states.UNFULFILLED;
 		this._value = null;
 		this._handlers = [];
+		this._deferred = false;
 	}
 
 	Promise.defer = typeof process !== 'undefined' && typeof process.nextTick === 'function'
@@ -17,7 +18,10 @@
 		if (this._state !== states.UNFULFILLED) return;
 		this._value = value;
 		this._state = states.FULFILLED;
-		Promise.defer(function() { self._runHandlers(); });
+		if (!this._deferred) {
+			Promise.defer(function() { self._runHandlers(); });
+			this._deferred = true;
+		}
 		return;
 	};
 
@@ -26,7 +30,10 @@
 		if (this._state !== states.UNFULFILLED) return;
 		this._value = error;
 		this._state = states.FAILED;
-		Promise.defer(function() { self._runHandlers(); });
+		if (!this._deferred) {
+			Promise.defer(function() { self._runHandlers(); });
+			this._deferred = true;
+		}
 		return;
 	};
 
@@ -38,8 +45,10 @@
 			failed: failedHandler,
 			promise: promise
 		});
-		if (this._state !== states.UNFULFILLED)
+		if (this._state !== states.UNFULFILLED && !this._deferred) {
 			Promise.defer(function() { self._runHandlers(); });
+			this._deferred = true;
+		}
 		return promise;
 	};
 
@@ -53,6 +62,7 @@
 	};
 
 	Promise.prototype._runHandlers = function() {
+		this._deferred = false;
 		var value = this._value;
 		if (this._state == states.UNFULFILLED) return;
 		var fulfilled = this._state === states.FULFILLED;
