@@ -8,7 +8,7 @@
 		this._handlers = [];
 	}
 
-	Promise.defer = typeof process != 'undefined' ? process.nextTick : function(fn) {
+	Promise.defer = typeof process != 'undefined' && process.nextTick ? process.nextTick : function(fn) {
 		setTimeout(fn, 0);
 	};
 
