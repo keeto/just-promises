@@ -2,6 +2,14 @@
 
 	var states = {UNFULFILLED: 0, FULFILLED: 1, FAILED: 2};
 
+	function pipe(first, second) {
+		first.then(function(object) {
+			second.fulfill(object);
+		}, function(error) {
+			second.fail(error);
+		});
+	}
+
 	function Promise() {
 		this._state = states.UNFULFILLED;
 		this._value = null;
@@ -9,9 +17,10 @@
 		this._deferred = false;
 	}
 
-	Promise.defer = typeof process !== 'undefined' && typeof process.nextTick === 'function'
-		? process.nextTick 
-		: function(fn) { setTimeout(fn, 0); };
+	Promise.defer = typeof process !== 'undefined' &&
+		typeof process.nextTick === 'function'
+			? process.nextTick
+			: function(fn) { setTimeout(fn, 0); };
 
 	Promise.prototype.fulfill = function(value) {
 		var self = this;
@@ -71,9 +80,16 @@
 			var handler = handlers[i];
 			var callback = handler[fulfilled ? 'fulfilled' : 'failed'];
 			var promise = handler.promise;
-			if (!callback) {
-				if (fulfilled) promise.fulfill(value);
-				else promise.fail(value);
+			if (!callback || typeof callback != 'function') {
+				if (value && typeof value.then == 'function') {
+					pipe(value, promise);
+				} else {
+					if (fulfilled) {
+						promise.fulfill(value);
+					} else {
+						promise.fail(value);
+					}
+				}
 				continue;
 			}
 			try {
@@ -82,14 +98,10 @@
 				promise.fail(e);
 				continue;
 			}
-			if (returnValue instanceof Promise) {
-				returnValue.pipe(promise);
+			if (returnValue && typeof returnValue.then == 'function') {
+				pipe(returnValue, promise);
 			} else {
-				if (!fulfilled && returnValue === undefined) {
-					promise.fail(returnValue);
-				} else {
-					promise.fulfill(returnValue);
-				}
+				promise.fulfill(returnValue);
 			}
 		}
 	};

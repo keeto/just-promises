@@ -1,14 +1,14 @@
 Just Promises
 =============
 
-A barebones implementation of the [CommonJS Promises/A proposal][promise-a].
+A barebones implementation of the [Promises/A+][promises-a-plus] (and by extension the [CommonJS Promises/A proposal][promises-a]).
 
 
 Features
 --------
 
 - Contains just the bare-minumum stuff needed to comply with the Promises/A proposal.
-- Passes all the tests from the [Promise-Tests project][promise-tests].
+- Passes all the tests from the [Promises/A+ Tests][promises-a-plus-test] and the [Promise-Tests project][promises-tests].
 - Assured asynchronousity, no need to worry about resolution race-conditions.
 - Implemented as a JavaScript class and supports quick extensibility.
 - Extras for those who really want them.
@@ -56,6 +56,8 @@ The library exposes a single class called `Promise`. To create a new promise, si
 var promise = new Promise();
 ```
 
+#### Promise.prototype.fulfill
+
 The value of a promise can be fulfilled using the `fulfill` method:
 
 ```js
@@ -63,12 +65,16 @@ var promise = new Promise();
 promise.fulfill('Hello'); // the promise is now resolved.
 ```
 
+#### Promise.prototype.fail
+
 A promise can be failed using the `fail` method:
 
 ```js
 var promise = new Promise();
 promise.fail(new Error()); // the promise is now failed.
 ```
+
+#### Promise.prototype.then
 
 As directed by the Promise/A spec, all promises have a `then` method that accepts three callbacks: a fulfilled callback, a fail callback and a progress callback--all of them optional.
 
@@ -78,6 +84,8 @@ promise.then(fulfilledFn, failFn, progressFn);
 ```
 
 The fulfilled and the fail callbacks are called when the promise is fulfilled or failed, respectively. Progress handlers are, consciously, ignored for now.
+
+#### Promise.prototype.pipe
 
 There is only one "utility" method included in the main library called `pipe`. This method can be used to pipe the results of one promise to another.
 
@@ -111,6 +119,8 @@ promise.then(null, errorHandler);
 promise.rescue(errorHandler);
 ```
 
+#### Promise.prototype.get
+
 The `get` method takes a string argument that corresponds to a property name in the future value of a promise. It then returns a promise that would be fulfilled with that property's value.
 
 ```js
@@ -122,6 +132,8 @@ promise.get('greeting').then(function(greeting) {
 	console.log(greeting); // logs "Hello"
 });
 ```
+
+#### Promise.prototype.call
 
 The `call` method takes a string argument that corresponds to a method name in the future value of a promise, as well zero or more additional arguments. It then returns a promise that would be fulfilled with the return value of that method called with the arguments.
 
@@ -141,6 +153,8 @@ promise.call('sum', 1, 2, 3, 4).then(function(value) {
 });
 ```
 
+#### Promise.prototype.thenSpread
+
 The `thenSpread` method is similar to the `then` method, but if the promise is fulfilled with an array, it would "spread" the items in the array as arguments to the fulfillment callback:
 
 ```js
@@ -158,13 +172,17 @@ promise.thenSpread(function(first, second, third, fourth) {
 
 ### Generics
 
+#### Promise.all
+
 `Promise.all` is a utility generic that accepts an array of promises and returns a promise that will be fulfilled with an array containing the resolved values of all promises. If one of the promises in the original array fails, the promise returned by `Promise.all` will also be failed.
 
 
 Copyright and License
 ---------------------
 
-Copyright 2012, Mark "Keeto" Obcena <keetology.com>. Released under an MIT-Style License.
+Copyright 2013, Mark "Keeto" Obcena <keetology.com>. Released under an MIT-Style License.
 
-[promise-a]: http://wiki.commonjs.org/wiki/Promises/A
-[promise-tests]: https://github.com/domenic/promise-tests
+[promises-a-plus]: http://promises-aplus.github.com/promises-spec/
+[promises-a]: http://wiki.commonjs.org/wiki/Promises/A
+[promises-a-plus-tests]: https://github.com/promises-aplus/promises-tests
+[promises-tests]: https://github.com/domenic/promise-tests
